@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration Form</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/menu.css">
+	<script defer src="/js/menu.js"></script>
+</head>
+<body>
+	<div th:replace="fragment/menu :: navbar"></div> 
+    <div class="container">
+        <div><span id="passwordError"></span></div>
+        <form th:action="@{${taskId} != null ? '/updateTask/' + ${taskId} : '/addTask'}" method="POST">
+            
+            <div class="form-group">
+                <label for="empId">Employee Id</label>
+                <input type="text" id="empId" name="empId" placeholder="Enter Employee Id" th:value="${empId}" readonly required>
+            </div>
+            <div class="form-group">
+                <label for="task">task</label>
+                <textarea id="task" name="task" rows="4" cols="50" th:text="${task?.task}" placeholder="Write your task here..." required></textarea>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="duration">duration</label>
+                <input type="number" id="duration" name="duration" th:value="${task?.duration}" placeholder="Enter duration" required>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="status">Select status</label>
+                <select id="status" name="status" required>
+                    <option value="" disabled selected  th:selected="${task == null || task.status == null}">Select value</option>
+                    <option value = "Not yet started" th:selected="${task != null && task.status == 'Not yet started'}">Not yet started</option>
+                    <option value="Inprogress" th:selected="${task != null && task.status == 'Inprogress'}">Inprogress</option>
+                    <option value="Completed" th:selected="${task != null && task.status == 'Completed'}">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class = "btn-submit" type="submit">Submit</button>
+                <button class = "btn-reset" type="reset">Reset</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

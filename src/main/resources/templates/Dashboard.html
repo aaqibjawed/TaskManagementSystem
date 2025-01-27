@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Task Dashboard</title>
+	<link rel="stylesheet" href="/css/Dashboard.css">
+	<link rel="stylesheet" href="/css/menu.css">
+	<script defer src="/js/menu.js"></script>
+	<script defer src="/js/dashboard.js"></script>
+
+</head>
+<body>
+	<div th:replace="fragment/menu :: navbar"></div> 
+    <header>
+        <h1>Employee Task Dashboard</h1>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Task</th>
+                    <th>Task Time</th>
+                    <th>Status</th>
+                    <th>Review Date</th>
+                    <th>Review Status</th>
+                    <th>Comments</th>
+                    <th>Comments Implemented</th>
+					<th th:classappend="${role != 'team_lead'} ? 'hidden' : ''">Action</th>
+					<th th:classappend="${role != 'executive'} ? 'hidden' : ''">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+				<tr th:each="data : ${dashboardData}">
+					<td th:text="${data.empName != null ? data.empName : ''}">John Doe</td>
+					<td>
+						<span class="long-content"
+							th:text="${data.task != null && data.task.length() > 100 ? data.task.substring(0, 100) + '...' : data.task}">
+						</span>
+						<span><button th:if="${data.task != null && data.task.length() > 100}" class="view-more-btn" onclick="showFullComment(this)"
+							th:data-comment="${data.task}">
+							View More
+						</button>
+						</span>	
+					
+					</td>
+					<td th:text="${data.duration != null ? data.duration : ''}">2 hours</td>
+					<td>
+						<span th:class="'status ' + (${data.status == 'Not yet started' ? 'not-started' : 
+						                             (data.status == 'Inprogress' ? 'inprogress' : 
+						                             (data.status == 'Completed' ? 'completed' : ''))})"
+						      th:text="${data.status ?: ''}">
+						</span>   				 	</td>
+						<td th:text="${data.reviewDate != null ? #temporals.format(data.reviewDate, 'dd-MM-yyyy') : ''}"></td>
+					<td>
+						<span th:class="'status ' + (${data.reviewStatus == null ? 'not-started' : 
+							                             (data.reviewStatus == 'Not yet started' ? 'not-started' : 
+							                             (data.reviewStatus == 'Inprogress' ? 'inprogress' : 
+							                             (data.reviewStatus == 'Completed' ? 'completed' : '')))})"
+						      th:text="${data.reviewStatus ?: 'Not yet started'}">
+						</span>  					</td>
+					<td>
+						<span class="long-content"
+							th:text="${data.comments != null && data.comments.length() > 100 ? data.comments.substring(0, 100) + '...' : data.comments}">
+						</span>
+						<span><button th:if="${data.comments != null && data.comments.length() > 100}" class="view-more-btn" onclick="showFullComment(this)"
+							th:data-comment="${data.comments}">
+							View More
+						</button>
+						</span>				
+					</td>	
+					<td>
+						<span th:class="(${data.isCommentImplemented == 'Yes' ? 'comment-yes' : 
+						                  (data.isCommentImplemented == 'No' ? 'comment-no' : 
+						                  (data.isCommentImplemented == 'Partially' ? 'comment-partially' : ''))})"
+						      th:text="${data.isCommentImplemented ?: ''}">
+						</span>		
+					</td>	
+					<td class="team-lead-actions" th:classappend="${role != 'team_lead'} ? 'hidden' : ''">
+					  <button class="action-btn review-btn" th:onclick="'location.href=\'/review/' + ${data.taskId} + '\';'">Review</button>
+					  <button class="action-btn history-btn"  th:onclick="'location.href=\'/task/history/ + \' + ${data.taskId} + '\';'">History</button>
+					</td>
+					<td class="executive-actions" th:classappend="${role != 'executive'} ? 'hidden' : ''">
+					  <button class="action-btn update-btn" th:onclick="'location.href=\'/task/' + ${data.taskId} + '\';'">Update</button>
+					  <button class="action-btn delete-btn" th:onclick="'location.href=\'/delete/' + ${data.taskId} + '\';'">Delete</button>
+					</td>
+
+				</tr>
+            </tbody>
+        </table>
+		<div id="comment-modal" class="modal">
+			<div class="modal-content">
+				<span class="close-btn" onclick="closeModal()">&times;</span>
+				<p id="full-comment"></p>
+			</div>
+		</div>
+
+    </main>
+</body>
+</html>

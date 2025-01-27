@@ -1,0 +1,249 @@
+    /* General Reset */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9fafc;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+}
+
+main {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+}
+.hidden {
+    display: none;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    text-align: left;
+    padding: 12px 15px;
+}
+
+th {
+    background-color: #4CAF50;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #e6ffe6;
+}
+
+td {
+    font-size: 14px;
+}
+.long-content {
+    text-align: left;
+    display: inline-block;
+    min-width: 150px;
+}
+.status {
+    font-weight: bold;
+    padding: 5px 5px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    min-width: 100px;
+}
+
+.status.not-started {
+    background-color: #ffeb3b;
+    color: #795548;
+}
+
+.status.inprogress {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+.status.completed {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.comment-yes {
+    color: #4CAF50;
+    font-weight: bold;
+}
+.comment-partially {
+    color: #2196F3;
+    font-weight: bold;
+}
+
+.comment-no {
+    color: #F44336;
+    font-weight: bold;
+}
+/* General styling for the Review button */
+button {
+    background-color: #4CAF50; /* Green background */
+    color: white;             /* White text */
+    border: none;             /* Remove border */
+    padding: 10px 20px;       /* Add padding */
+    font-size: 14px;          /* Set font size */
+    cursor: pointer;          /* Change cursor to pointer on hover */
+    border-radius: 5px;       /* Rounded corners */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+/* Hover effect for the button */
+button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05);    /* Slightly enlarge the button */
+}
+
+/* Focus effect for accessibility */
+button:focus {
+    outline: 2px solid #4CAF50; /* Green outline */
+    outline-offset: 2px;        /* Offset the outline */
+}
+
+/* Disabled button style */
+button:disabled {
+    background-color: #ccc;   /* Gray background */
+    color: #666;              /* Darker gray text */
+    cursor: not-allowed;      /* Change cursor to indicate disabled state */
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Black background with opacity */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+    text-align: center;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Styling for the "View More" button to look like a subtle link */
+.view-more-btn {
+	background-color: none;
+    background: none; /* No background */
+    border: none; /* No border */
+    color: #007bff; /* Blue text to resemble a link */
+    font-size: 14px; /* Slightly smaller text */
+    text-decoration: underline; /* Underline to mimic a link */
+    cursor: pointer; /* Pointer cursor on hover */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.view-more-btn:hover {
+    color: rgb(0, 0, 255);
+    background-color: cornsilk; /* Darker blue on hover */
+}
+
+.view-more-btn:active {
+    color: #004085; /* Even darker blue when clicked */
+}
+.action-btn {
+  display: inline-block;
+  padding: 10px 7px;
+  margin: 0 0px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.review-btn {
+  background-color: #4CAF50; /* Green */
+}
+
+.review-btn:hover {
+  background-color: #45a049;
+}
+
+.history-btn {
+  background-color: #2196F3; /* Blue */
+}
+
+.history-btn:hover {
+  background-color: #1e88e5;
+}
+
+.update-btn {
+  background-color: #fbc02d; /* Yellow */
+}
+
+.update-btn:hover {
+  background-color: #f9a825;
+}
+
+.delete-btn {
+  background-color: #f44336; /* Red */
+}
+
+.delete-btn:hover {
+  background-color: #e53935;
+}
+
+/* Ensure buttons inside team-lead-actions and executive-actions are aligned in a row */
+.team-lead-actions,
+.executive-actions {
+  white-space: nowrap; /* Prevent wrapping of buttons */
+}
+
+.team-lead-actions button,
+.executive-actions button {
+  display: inline-block; /* Inline buttons */
+  margin-right: 0px; /* Add consistent spacing */
+  vertical-align: middle; /* Align with text if any */
+}
+
+.team-lead-actions button:last-child,
+.executive-actions button:last-child {
+  margin-right: 0; /* Remove margin for the last button */
+}
+
+

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task History</title>
+    <link rel="stylesheet" href="/css/History.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <script defer src="/js/menu.js"></script>
+    <script defer src="/js/dashboard.js"></script>
+
+    </head>
+<body>
+	<div th:replace="fragment/menu :: navbar"></div> 
+<div class="container">
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div>
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date">
+        </div>
+        <div>
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date">
+        </div>
+        <div>
+            <label for="task-status">Task Status:</label>
+            <select id="task-status">
+                <option value="">All</option>
+                <option value="completed">Completed</option>
+                <option value="inprogress">Inprogress</option>
+                <option value="not-started">Not Started</option>
+            </select>
+        </div>
+        <div>
+            <label for="review-status">Review Status:</label>
+            <select id="review-status">
+                <option value="">All</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
+            </select>
+        </div>
+        <button type="button">Filter</button>
+    </div>
+    
+    <!-- Task History Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Task Time</th>
+                <th>Status</th>
+                <th>Review Date</th>
+                <th>Review Status</th>
+                <th>Comments</th>
+                <th>Comments Implemented</th>
+				<th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="data : ${dashboardData}">
+					<td>
+						<span class="long-content"
+							th:text="${data.task != null && data.task.length() > 100 ? data.task.substring(0, 100) + '...' : data.task}">
+						</span>
+						<span><button th:if="${data.task != null && data.task.length() > 100}" class="view-more-btn" onclick="showFullComment(this)"
+							th:data-comment="${data.task}">
+							View More
+						</button>
+						</span>	
+					
+					</td>                
+				<td th:text="${data.duration != null ? data.duration : ''}">2 hours</td>
+                <td>
+						<span th:class="'status ' + (${data.status == 'Not yet started' ? 'not-started' : 
+						                             (data.status == 'Inprogress' ? 'inprogress' : 
+						                             (data.status == 'Completed' ? 'completed' : ''))})"
+						      th:text="${data.status ?: ''}">
+						</span>   				 	</td>
+						<td th:text="${data.reviewDate != null ? #temporals.format(data.reviewDate, 'dd-MM-yyyy') : ''}"></td>
+					<td>
+						<span th:class="'status ' + (${data.reviewStatus == null ? 'not-started' : 
+							                             (data.reviewStatus == 'Not yet started' ? 'not-started' : 
+							                             (data.reviewStatus == 'Inprogress' ? 'inprogress' : 
+							                             (data.reviewStatus == 'Completed' ? 'completed' : '')))})"
+						      th:text="${data.reviewStatus ?: 'Not yet started'}">
+						</span>  					</td>
+					<td>
+						<span class="long-content"
+							th:text="${data.comments != null && data.comments.length() > 100 ? data.comments.substring(0, 100) + '...' : data.comments}">
+						</span>
+						<span><button th:if="${data.comments != null && data.comments.length() > 100}" class="view-more-btn" onclick="showFullComment(this)"
+							th:data-comment="${data.comments}">
+							View More
+						</button>
+						</span>				
+					</td>	
+					<td>
+						<span th:class="(${data.isCommentImplemented == 'Yes' ? 'comment-yes' : 
+						                  (data.isCommentImplemented == 'No' ? 'comment-no' : 
+						                  (data.isCommentImplemented == 'Partially' ? 'comment-partially' : ''))})"
+						      th:text="${data.isCommentImplemented ?: ''}">
+						</span>		
+					</td>	
+					<td th:classappend="${role != 'team_lead'} ? 'hidden' : ''">
+						<button th:onclick="'location.href=\'/review/' + ${data.taskId} + '\';'">Review</button>
+					</td>
+					<td th:classappend="${role != 'executive'} ? 'hidden' : ''">
+						<button th:onclick="'location.href=\'/task/' + ${data.taskId} + '\';'">Update</button>
+					</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+		<div id="comment-modal" class="modal">
+			<div class="modal-content">
+				<span class="close-btn" onclick="closeModal()">&times;</span>
+				<p id="full-comment"></p>
+			</div>
+		</div>
+
+</body>
+</html>

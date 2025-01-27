@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration Form</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/Review.css">
+    <link rel="stylesheet" href="/css/menu.css">
+	<script defer src="/js/menu.js"></script>
+</head>
+<body>
+	<div th:replace="fragment/menu :: navbar"></div> 
+    <div class="container">
+	<label for="name">Name</label>
+	<input id = "name" name="name" th:value="${name}" readonly/>
+	<label for="task">task</label>
+    <textarea id="task" name="task" rows="4" cols="50" th:text= "${task}" readonly></textarea>
+        <form th:action="@{'/review/' + ${taskId}}" method="POST">
+            <div class="form-group">
+                <label for="reviewStatus">Review Status</label>
+                <select id="reviewStatus" name="reviewStatus" required>
+                    <option value="" th:selected="${review == null or review.reviewStatus == null}" disabled>Select Status</option>
+                    <option value="Not yet started" th:selected="${review?.reviewStatus == 'Not yet started'}">Not yet started</option>
+                    <option value="Inprogress" th:selected="${review?.reviewStatus == 'Inprogress'}">Inprogress</option>
+                    <option value="Completed" th:selected="${review?.reviewStatus == 'Completed'}">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="comments">comments</label>
+                <textarea id="comments" name="comments" rows="4" cols="50" th:text="${review?.comments ?: ''}" placeholder="Write your comments here..." required></textarea>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="isCommentImplemented">Is comment implemented</label>
+                <select id="isCommentImplemented" name="isCommentImplemented"  required>
+                    <option value="" disabled th:selected="${review == null or review.isCommentImplemented == null}">Select value</option>
+                    <option value="No" th:selected="${review?.isCommentImplemented == 'No'}">No</option>
+                    <option value="Partially" th:selected="${review?.isCommentImplemented == 'Partially'}">Partially</option>
+                    <option value="Yes" th:selected="${review?.isCommentImplemented == 'Yes'}">Yes</option>
+               </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
