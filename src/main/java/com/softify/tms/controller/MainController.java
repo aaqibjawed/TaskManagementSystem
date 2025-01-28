@@ -53,7 +53,7 @@ public class MainController {
 		model.addAttribute("dashboardData", dashboards);
 		for(Dashboard data: dashboards)
 			System.out.println(data.toString());
-		return "Dashboard";
+		return "index";
 	}
 	@GetMapping("/registration")
 	public String registration() {
