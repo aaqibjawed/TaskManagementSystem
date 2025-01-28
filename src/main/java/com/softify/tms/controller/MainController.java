@@ -42,8 +42,14 @@ public class MainController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String empId = authentication.getName();
 		Employee e = employeeService.getById(empId);
-		model.addAttribute("role", e.getRole());
-		List<Dashboard> dashboards = dashboardService.getDashboard();
+		String role = e.getRole();
+		model.addAttribute("role", role);
+		List<Dashboard> dashboards = null;
+		if(role.equals("team_lead")) {
+			 dashboards = dashboardService.getDashboard();
+		}else if(role.equals("executive")) {
+			 dashboards = dashboardService.getDashboardById(empId);
+		}
 		model.addAttribute("dashboardData", dashboards);
 		for(Dashboard data: dashboards)
 			System.out.println(data.toString());
@@ -84,7 +90,7 @@ public class MainController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Employee loggedInE = employeeService.getById(authentication.getName());
 		List<Dashboard> dashboards = dashboardService.getDashboardById(empId);
-		model.addAttribute("role", loggedInE.getId());
+		model.addAttribute("role", loggedInE.getRole());
 		model.addAttribute("dashboardData", dashboards);
 		return "History";
 	}
@@ -110,6 +116,21 @@ public class MainController {
 			  model.addAttribute("review", review);
 		  }
 		  return "Review";  
+	}
+	@GetMapping("/delete/{taskId}")
+	public String delete(@PathVariable(name = "taskId") Long taskId, Model model) {
+		reviewService.deleteByTaskId(taskId);
+		taskService.deleteTask(taskId);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String empId = authentication.getName();
+		Employee e = employeeService.getById(empId);
+		model.addAttribute("role", e.getRole());
+		List<Dashboard> dashboards = dashboardService.getDashboard();
+		model.addAttribute("dashboardData", dashboards);
+		for(Dashboard data: dashboards)
+			System.out.println(data.toString());
+		return "redirect:/dashboard";
 	}
 
 	@PostMapping("/registration")

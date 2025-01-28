@@ -14,4 +14,5 @@ public interface ReviewRepo extends JpaRepository<Review, Long>{
 	Optional<Review> findByTaskId(Long taskId);
 	boolean existsByTaskId(Long taskId);
 	List<Review> findByEmpId(String empId);
+	void deleteByTaskId(Long taskId);
 }

@@ -79,10 +79,10 @@
 					</td>	
 					<td class="team-lead-actions" th:classappend="${role != 'team_lead'} ? 'hidden' : ''">
 					  <button class="action-btn review-btn" th:onclick="'location.href=\'/review/' + ${data.taskId} + '\';'">Review</button>
-					  <button class="action-btn history-btn"  th:onclick="'location.href=\'/task/history/ + \' + ${data.taskId} + '\';'">History</button>
+						<button class="action-btn history-btn" th:attr="onclick='location.href=\'/task/history/' + ${data.empId} + '\';'"> History</button>
 					</td>
 					<td class="executive-actions" th:classappend="${role != 'executive'} ? 'hidden' : ''">
-					  <button class="action-btn update-btn" th:onclick="'location.href=\'/task/' + ${data.taskId} + '\';'">Update</button>
+					  <button class="action-btn update-btn" th:onclick="@{'location.href=\'/task/' + ${data.taskId} + '\';'}">Update</button>
 					  <button class="action-btn delete-btn" th:onclick="'location.href=\'/delete/' + ${data.taskId} + '\';'">Delete</button>
 					</td>
 

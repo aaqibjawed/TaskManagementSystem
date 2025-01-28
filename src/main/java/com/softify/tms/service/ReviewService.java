@@ -2,6 +2,7 @@ package com.softify.tms.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.softify.tms.entity.Review;
 import com.softify.tms.repository.ReviewRepo;
@@ -18,5 +19,9 @@ public class ReviewService {
 	}
 	public boolean existsByTaskId(Long taskId) {
 		return reviewRepo.existsByTaskId(taskId);
+	}
+    @Transactional
+	public void deleteByTaskId(Long taskId) {
+		 reviewRepo.deleteByTaskId(taskId);
 	}
 }
