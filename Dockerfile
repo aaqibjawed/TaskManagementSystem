@@ -15,7 +15,7 @@ COPY src ./src
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew build
+RUN ./gradlew build && ls -l build/libs
 
 # Expose the port your app runs on
 EXPOSE 8080
