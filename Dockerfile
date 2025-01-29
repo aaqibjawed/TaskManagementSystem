@@ -21,4 +21,4 @@ RUN ./gradlew build && ls -l build/libs
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "build/libsTaskManagementSystem-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "build/libs/TaskManagementSystem-0.0.1-SNAPSHOT.jar"]
