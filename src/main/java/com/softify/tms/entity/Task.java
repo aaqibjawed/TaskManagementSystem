@@ -1,5 +1,9 @@
 package com.softify.tms.entity;
 
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +18,8 @@ public class Task {
     private String task;
     private Integer duration;
     private String status;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime taskDate;
 
 	
 	public Task() {
@@ -79,6 +85,16 @@ public class Task {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+
+	public LocalDateTime getTaskDate() {
+		return taskDate;
+	}
+
+
+	public void setTaskDate(LocalDateTime taskDate) {
+		this.taskDate = taskDate;
 	}
 
 	

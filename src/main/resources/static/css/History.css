@@ -37,7 +37,8 @@ header {
 }
 
 .filter-section select,
-.filter-section input[type="date"] {
+.filter-section input[type="date"],
+.filter-section input[type="text"] {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;

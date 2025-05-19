@@ -1,9 +1,11 @@
 package com.softify.tms.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.softify.tms.entity.Dashboard;
 import com.softify.tms.entity.Employee;
@@ -22,6 +26,8 @@ import com.softify.tms.service.DashboardService;
 import com.softify.tms.service.EmployeeService;
 import com.softify.tms.service.ReviewService;
 import com.softify.tms.service.TaskService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class MainController {
@@ -74,25 +80,55 @@ public class MainController {
 		return "Task";
 	}
 	@GetMapping("/task/history")
-	public String taskHistory(Model model) {
+	public String taskHistory(HttpServletRequest request, Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String empId = authentication.getName();
 		Employee e = employeeService.getById(empId);
-		List<Dashboard> dashboards = dashboardService.getDashboardById(empId);
+		List<Dashboard> dashboards = null;
+		if(e.getRole().equals("executive"))
+			dashboards = dashboardService.getDashboardById(empId);
+		else if(e.getRole().equals("team_lead"))
+			dashboards = dashboardService.getAllDashboard();
+		model.addAttribute("url", request.getRequestURI());
 		model.addAttribute("role", e.getRole());
 		model.addAttribute("empId", empId);
 		model.addAttribute("dashboardData", dashboards);
 		return "History";
 	}
 	@GetMapping("/task/history/{empId}")
-	public String taskHistory(@PathVariable(name="empId") String empId, Model model) {
+	public String taskHistory(HttpServletRequest request, @PathVariable(name="empId") String empId, Model model) {
 		Employee e = employeeService.getById(empId);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Employee loggedInE = employeeService.getById(authentication.getName());
 		List<Dashboard> dashboards = dashboardService.getDashboardById(empId);
 		model.addAttribute("role", loggedInE.getRole());
 		model.addAttribute("dashboardData", dashboards);
+		model.addAttribute("url", request.getRequestURI());
 		return "History";
+	}
+	@GetMapping("/task/history/filter")
+	public String filterHistory(
+			@RequestParam(name = "empName", required = false) String empName, 
+			@RequestParam(name = "empName", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam(name = "empName", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+			@RequestParam(name = "empName", required = false) String taskStatus,
+			@RequestParam(name = "empName", required = false) String reviewSatus,
+			HttpServletRequest request,
+			Model model
+			) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String empId = authentication.getName();
+		Employee e = employeeService.getById(empId);
+		List<Dashboard> dashboards = null;
+		if(e.getRole().equals("executive"))
+			dashboards = dashboardService.getFilteredDashboard(empId, empName, startDate, endDate, taskStatus,reviewSatus);
+		else if(e.getRole().equals("team_lead"))
+			dashboards = dashboardService.getFilteredDashboard(empId, empName, startDate, endDate, taskStatus,reviewSatus);
+		model.addAttribute("url", request.getRequestURI());
+		model.addAttribute("role", e.getRole());
+		model.addAttribute("empId", empId);
+		model.addAttribute("dashboardData", dashboards);
+		return "redirect:/task/history";
 	}
 	@GetMapping("/task/{taskId}")
 	public String updateTask(@PathVariable(name = "taskId") Long taskId, Model model) {
@@ -152,6 +188,7 @@ public class MainController {
 	@PostMapping("/addTask") 
 	public String add(@ModelAttribute("t") Task task, Model model) { 
 		try {
+			task.setTaskDate(LocalDateTime.now());
 			if(taskService.saveTask(task) == null) {
 				System.out.println("Task not saved"); 
 				return "Task"; 
